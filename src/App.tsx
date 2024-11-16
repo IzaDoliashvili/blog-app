@@ -4,6 +4,7 @@ import { Layout } from './layout/Layout';
 import { Home } from "./pages/home/home";
 import { SignIn } from "./pages/signin/index";
 import { SignUp } from "./pages/signup/index";
+import "./i18n";
 
 export const App: React.FC = () => {
   return (
@@ -17,6 +18,7 @@ export const App: React.FC = () => {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         </Route>
+        
       </Routes>
     </Router>
   );
