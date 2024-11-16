@@ -4,15 +4,17 @@ import { ArticleItem } from '../../pages/home/articles/article-item';
 
 export const Home: React.FC = () => {
   return (
+
   <>
-    <div className="articles-container">
+  <div className="container mx-auto mt-8 flex px-4">
+    <div className="articles-container w-2/3">
       <h2 className="text-2xl font-bold text-white mb-4">Recent Articles</h2>
       {articles.map((article) => (
         <ArticleItem key={article.id} article={article} />
       ))}
     </div>
     <aside className="w-1/3 space-y-6 ml-8">
-      <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+      <div className=" border p-6 rounded-lg shadow-lg">
         <h3 className="text-xl font-semibold text-white">Popular Tags</h3>
         <div className="mt-4 flex flex-wrap gap-2">
           {['Blockchain', 'Cryptocurrency', 'Technology', 'Programming', 'AI', 'Machine Learning'].map(tag => (
@@ -20,7 +22,7 @@ export const Home: React.FC = () => {
           ))}
         </div>
       </div>
-      <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+      <div className=" border p-6 rounded-lg shadow-lg">
         <h3 className="text-xl font-semibold text-white">Featured Authors</h3>
         <div className="mt-4 space-y-4">
           {[
@@ -39,6 +41,7 @@ export const Home: React.FC = () => {
         </div>
       </div>
     </aside>
+    </div>
   </>
   );
   

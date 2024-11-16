@@ -4,12 +4,25 @@ export default {
     content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
   theme: {
   	extend: {
+		textColor: {
+			base: "var(--text-color)", 
+		  },
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
   		},
+		borderColor: {
+			base: "var(--border-color)", 
+		},
   		colors: {
+			light: "#ffffff", 
+			dark: "#1e3a8a",
+			backgroundColor: {
+				base: "var(--background-color)",
+				"dark-1": "var(--dark-bg-color-1)", 
+				"dark-2": "var(--dark-bg-color-2)", 
+			  },
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

@@ -19,4 +19,14 @@ export const articles: Article[] = [
       summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...',
       tags: ['Cryptocurrency', 'Blockchain', 'Finance'],
     },
+    {
+      id: 3,
+      title: 'Understanding Cryptocurrency',
+      author: 'Alice Johnson',
+      date: 'June 10, 2023',
+      readTime: '6 min read',
+      summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...',
+      tags: ['Cryptocurrency', 'Blockchain', 'Finance'],
+    },
+
   ];
