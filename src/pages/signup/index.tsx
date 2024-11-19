@@ -1,10 +1,82 @@
-import React from "react";
+import React, { useState } from "react";
 import { Input } from "../../components/ui/input"
 import { Button, buttonVariants } from "../../components/ui/button";
 import { cn } from "../../lib/utils";
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
+import { register } from "@/supabase/auth";
+import { useMutation } from "@tanstack/react-query";
 
 export const SignUp: React.FC = () => {
+  // const [formData, setFormData] = useState({
+  //   name: "",
+  //   email: "",
+  //   password: "",
+  //   confirmPassword: "",
+  // });
+  // const [error, setError] = useState<string | null>(null);
+  // const [loading, setLoading] = useState(false);
+  // const navigate = useNavigate();
+
+  // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const { id, value } = e.target;
+  //   setFormData((prev) => ({ ...prev, [id]: value }));
+  // };
+
+  // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   setError(null);
+
+  //   const { name, email, password, confirmPassword } = formData;
+
+  //   if (!name) {
+  //     setError("Name is required.");
+  //     return;
+  //   }
+  //   if (password !== confirmPassword) {
+  //     setError("Passwords do not match!");
+  //     return;
+  //   }
+
+  //   try {
+  //     setLoading(true);
+  //     const { data, error } = await register({ name, email, password });
+  //     setLoading(false);
+
+  //     if (error) {
+  //       setError(error.message);
+  //     } else {
+  //       navigate("/home");
+  //     }
+  //   } catch (err: any) {
+  //     setLoading(false);
+  //     setError("Something went wrong. Please try again.");
+  //   }
+  //   try {
+  //     const response = await register({ name, email, password });
+  //     console.log("Response:", response);
+  //   } catch (err) {
+  //     console.error("Error:", err);
+  //   }
+  // };
+
+  const [registerPayload, setRegisterPayload] = useState({
+    email: "",
+    password: "",
+  });
+
+  const { mutate: handleRegister } = useMutation({
+    mutationKey: ["register"],
+    mutationFn: register,
+  });
+
+  const handleSubmit = () => {
+    const isEmailFilled = !!registerPayload.email;
+    const isPasswordFilled = !!registerPayload.password;
+
+    if (isEmailFilled && isPasswordFilled) {
+      handleRegister(registerPayload);
+    }
+  };
   return (
     <div className="flex items-center justify-center min-h-screen ">
       <div className="border p-6 rounded-lg shadow-md w-full max-w-sm">
@@ -12,24 +84,32 @@ export const SignUp: React.FC = () => {
         <p className="text-sm text-gray-600 mb-6 text-center">
         Create your account to start blogging
         </p>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-medium mb-1">
+            <label htmlFor="name" className="block text-sm font-medium mb-1">
               Name
             </label>
             <Input  
-              type=""
-              id="email"
-              placeholder="John D0e"
-              required/>
+              type="text"
+              id="name"
+              
+              placeholder="John Doe"
+              />
               <label htmlFor="email" className="block text-sm font-medium mb-1">
               Emale
             </label>
             <Input  
               type="email"
               id="email"
+              value={registerPayload.email}
+              onChange={(e) => {
+                setRegisterPayload({
+                  email: e.target.value,
+                  password: registerPayload.password,
+                });
+              }}
               placeholder="john@example.com"
-              required/>
+              />
             
           </div>
           <div className="mb-4">
@@ -39,19 +119,27 @@ export const SignUp: React.FC = () => {
             <Input
               type="password"
               id="password"
+              value={registerPayload.password}
+              onChange={(e) => {
+          setRegisterPayload({
+            email: registerPayload.email,
+            password: e.target.value,
+          });
+        }}
                required
             />
             <label htmlFor="password" className="block text-sm font-medium mb-1">
             Confirm Password
             </label>
             <Input
-              type="confirmpassword"
-              id="confirm password"
-               required
+              type="password"
+              id="confirmPassword"
+              
             />
           </div>
           
           <Button
+          onClick={handleSubmit}
             className={cn(buttonVariants({ variant: "link", size: "lg" }), " w-full bg-blue-600 text-white ")}>
             Sign up
            </Button>
@@ -67,3 +155,6 @@ export const SignUp: React.FC = () => {
     </div>
   );
 };
+
+
+
