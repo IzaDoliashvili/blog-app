@@ -8,6 +8,7 @@ export default {
 			base: "var(--text-color)", 
 		  },
   		borderRadius: {
+			xl:' var(--radius1)',
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
