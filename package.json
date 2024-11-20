@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "prepare": "husky"
+    "prepare": "husky",
+    "supabase": "supabase gen types typescript --project-id supabase-id > lib/supabase/database.types.ts"
   },
   "dependencies": {
     "@heroicons/react": "^2.1.5",

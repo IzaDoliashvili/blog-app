@@ -7,59 +7,7 @@ import { register } from "@/supabase/auth";
 import { useMutation } from "@tanstack/react-query";
 
 export const SignUp: React.FC = () => {
-  // const [formData, setFormData] = useState({
-  //   name: "",
-  //   email: "",
-  //   password: "",
-  //   confirmPassword: "",
-  // });
-  // const [error, setError] = useState<string | null>(null);
-  // const [loading, setLoading] = useState(false);
-  // const navigate = useNavigate();
-
-  // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const { id, value } = e.target;
-  //   setFormData((prev) => ({ ...prev, [id]: value }));
-  // };
-
-  // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   setError(null);
-
-  //   const { name, email, password, confirmPassword } = formData;
-
-  //   if (!name) {
-  //     setError("Name is required.");
-  //     return;
-  //   }
-  //   if (password !== confirmPassword) {
-  //     setError("Passwords do not match!");
-  //     return;
-  //   }
-
-  //   try {
-  //     setLoading(true);
-  //     const { data, error } = await register({ name, email, password });
-  //     setLoading(false);
-
-  //     if (error) {
-  //       setError(error.message);
-  //     } else {
-  //       navigate("/home");
-  //     }
-  //   } catch (err: any) {
-  //     setLoading(false);
-  //     setError("Something went wrong. Please try again.");
-  //   }
-  //   try {
-  //     const response = await register({ name, email, password });
-  //     console.log("Response:", response);
-  //   } catch (err) {
-  //     console.error("Error:", err);
-  //   }
-  // };
-
-  const [registerPayload, setRegisterPayload] = useState({
+   const [registerPayload, setRegisterPayload] = useState({
     email: "",
     password: "",
   });
@@ -67,16 +15,28 @@ export const SignUp: React.FC = () => {
   const { mutate: handleRegister } = useMutation({
     mutationKey: ["register"],
     mutationFn: register,
+    onSuccess: (data) => {
+      console.log("Registration Successful:", data); 
+      alert("Registration successful! Check your email to confirm your account.");
+    },
+    onError: (error: any) => {
+      console.error("Registration Failed:", error); 
+      alert(`Registration failed: ${error.message}`); 
+    },
   });
-
-  const handleSubmit = () => {
-    const isEmailFilled = !!registerPayload.email;
-    const isPasswordFilled = !!registerPayload.password;
-
-    if (isEmailFilled && isPasswordFilled) {
-      handleRegister(registerPayload);
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!registerPayload.email || !/\S+@\S+\.\S+/.test(registerPayload.email)) {
+      alert("Please enter a valid email address.");
+      return;
     }
+    if (registerPayload.password.length < 6) {
+      alert("Password must be at least 6 characters long.");
+      return;
+    }
+    handleRegister(registerPayload);
   };
+
   return (
     <div className="flex items-center justify-center min-h-screen ">
       <div className="border p-6 rounded-lg shadow-md w-full max-w-sm">
@@ -139,7 +99,7 @@ export const SignUp: React.FC = () => {
           </div>
           
           <Button
-          onClick={handleSubmit}
+          type="submit"
             className={cn(buttonVariants({ variant: "link", size: "lg" }), " w-full bg-blue-600 text-white ")}>
             Sign up
            </Button>
