@@ -1,10 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import { Input } from "../../components/ui/input"
 import { Button, buttonVariants } from "../../components/ui/button";
 import { cn } from "@/lib/utils";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { login } from "@/supabase/auth";
+import { userAtom } from "@/store/auth";
+import { useSetAtom } from "jotai";
 
 export const SignIn: React.FC = () => {
+
+  const navigate = useNavigate();
+  const setUser = useSetAtom(userAtom);
+  const [loginPayload, setLoginPayload] = useState({
+    email: "",
+    password: "",
+  });
+
+  const { mutate: handleLogin } = useMutation({
+    mutationKey: ["login"],
+    mutationFn: login,
+    onSuccess: (user) => {
+      setUser(user);
+      navigate("/home");
+    },
+  });
+
+  const handleSubmit = () => {
+    const isEmailFilled = !!loginPayload.email;
+    const isPasswordFilled = !!loginPayload.password;
+
+    if (isEmailFilled && isPasswordFilled) {
+      handleLogin(loginPayload);
+    }
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen ">
       <div className="border p-6 rounded-lg shadow-md w-full max-w-sm">
@@ -21,6 +51,13 @@ export const SignIn: React.FC = () => {
               type="email"
               id="email"
               placeholder="john@example.com"
+              value={loginPayload.email}
+        onChange={(e) => {
+          setLoginPayload({
+            email: e.target.value,
+            password: loginPayload.password,
+          });
+        }}
               required/>
             
           </div>
@@ -31,11 +68,19 @@ export const SignIn: React.FC = () => {
             <Input
               type="password"
               id="password"
+              value={loginPayload.password}
+        onChange={(e) => {
+          setLoginPayload({
+            email: loginPayload.email,
+            password: e.target.value,
+          });
+        }}
                required
             />
           </div>
           
           <Button
+            onClick={handleSubmit}
             className={cn(buttonVariants({ variant: "link", size: "lg" }), " w-full bg-blue-600 text-white ")}>
             Log In
            </Button>

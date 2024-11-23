@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Layout } from './layout/layout';
 import { Home } from "./pages/home/home";
@@ -8,10 +8,34 @@ import "./i18n";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { About } from './pages/about';
 import AuthorPage from './pages/authors/index';
+import { supabase } from "@/supabase";
+import AuthGuard from "@/components/route-guards/auth";
+import { useSetAtom } from "jotai";
+
+import { userAtom } from './store/auth';
+import ProfileView from './pages/account/profile';
 
 const queryClient = new QueryClient();
 
 export const App: React.FC = () => {
+
+  const setUser = useSetAtom(userAtom);
+ 
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [setUser]);
+
   return (
     <QueryClientProvider client={queryClient}>
          <Router>
@@ -23,8 +47,12 @@ export const App: React.FC = () => {
         </Route>
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/about" element={
+          <AuthGuard>
+          <About />
+        </AuthGuard>} />
         <Route path="/author/:authorName" element={<AuthorPage />} />
+        <Route path="/profile" element={<ProfileView />} />
         </Route>
         
       </Routes>

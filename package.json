@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "prepare": "husky",
-    "supabase": "supabase gen types typescript --project-id supabase-id > lib/supabase/database.types.ts"
+    "supabase": "supabase gen types typescript neqzfzfynbjicvoamfir supabase-id > src/supabase/database.types.ts"
   },
   "dependencies": {
     "@heroicons/react": "^2.1.5",
@@ -23,6 +23,7 @@
     "i18next": "^23.16.5",
     "i18next-browser-languagedetector": "^8.0.0",
     "install": "^0.13.0",
+    "jotai": "^2.10.3",
     "lucide-react": "^0.456.0",
     "npm": "^10.9.0",
     "react": "^18.3.1",
