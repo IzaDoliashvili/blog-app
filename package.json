@@ -12,6 +12,8 @@
     "supabase": "supabase gen types --lang=typescript --project-id=neqzfzfynbjicvoamfir > src/supabase/supabase.types.ts"
   },
   "dependencies": {
+    "@dicebear/collection": "^9.2.2",
+    "@dicebear/core": "^9.2.2",
     "@heroicons/react": "^2.1.5",
     "@radix-ui/react-dropdown-menu": "^2.1.2",
     "@radix-ui/react-slot": "^1.1.0",
