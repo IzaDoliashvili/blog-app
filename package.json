@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "prepare": "husky",
-    "supabase": "supabase gen types typescript neqzfzfynbjicvoamfir supabase-id > src/supabase/database.types.ts"
+    "supabase": "supabase gen types --lang=typescript --project-id=neqzfzfynbjicvoamfir > src/supabase/supabase.types.ts"
   },
   "dependencies": {
     "@heroicons/react": "^2.1.5",

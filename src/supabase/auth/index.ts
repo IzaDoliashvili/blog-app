@@ -10,15 +10,23 @@ export const register = ({
   return supabase.auth.signUp({ email, password });
   
 };
-export const login = async ({ email, password }: { email: string; password: string }) => {
-  const res = await supabase.auth.signInWithPassword({ email, password });
-  if (res.error) {
-    throw res.error;
+export const login = async ({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}) => {
+  const response = await supabase.auth.signInWithPassword({ email, password });
+
+  if (response.error) {
+    throw response.error; 
   }
-  return supabase.auth.getUser(); 
+
+  return response; 
 };
 
-    
+
 // export const login = ({
 //   email,
 //   password,
@@ -26,14 +34,14 @@ export const login = async ({ email, password }: { email: string; password: stri
 //   email: string;
 //   password: string;
 // }) => {
-//   return supabase.auth.signInWithPassword({ email, password }).then((res) => {
-//     if (res?.error) {
-//       throw res?.error;
-//     }
-//     return res;
-   
-    
-//   });
+//   return supabase.auth
+//     .signInWithPassword({ email, password })
+//     .then((response) => {
+//       if (response.error) {
+//         throw response?.error;
+//       }
+//       return response;
+//     });
 // };
 
 export const logout = () => {

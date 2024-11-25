@@ -34,21 +34,25 @@ export const Header: React.FC = () => {
         <Link to="/about" className="hover:text-gray-400">{t("About")}</Link>
       </nav>
       <div className="flex w-1/4 items-center justify-end text-blue-400">
-      {user ? (
+      {!user ? (
           <>
-            <NavLink to="/profile">Profile</NavLink>
-            <button onClick={() => handleLogout()} className="text-red-500">
-              Logout
+           <Link to="/signin">
+          
+          <button className="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700">
+            {t("Sign In")}
             </button>
+          </Link>
+           
           </>
         ) : (
-           
-        <Link to="/signin">
-          
-        <button className="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700">
-          {t("Sign In")}
+         <>
+
+          <NavLink to="/profile">Profile</NavLink>
+          <button onClick={() => handleLogout()} className="text-red-500">
+            Logout
           </button>
-        </Link>
+          </>
+       
       
         )}
         

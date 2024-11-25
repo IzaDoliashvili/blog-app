@@ -1,37 +1,43 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 import { Input } from "../../components/ui/input"
 import { Button, buttonVariants } from "../../components/ui/button";
 import { cn } from "@/lib/utils";
 import { Link, useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation , useQueryClient} from "@tanstack/react-query";
 import { login } from "@/supabase/auth";
-import { userAtom } from "@/store/auth";
-import { useSetAtom } from "jotai";
 
 export const SignIn: React.FC = () => {
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const navigate = useNavigate();
-  const setUser = useSetAtom(userAtom);
-  const [loginPayload, setLoginPayload] = useState({
-    email: "",
-    password: "",
-  });
+  const queryClient = useQueryClient();
 
   const { mutate: handleLogin } = useMutation({
     mutationKey: ["login"],
     mutationFn: login,
-    onSuccess: (user) => {
-      setUser(user);
+    onSuccess: () => {
+      queryClient.invalidateQueries();
       navigate("/home");
     },
   });
+  const handleEmail = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setEmail(value);
+  };
+  const handlePassword = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setPassword(value);
+  };
 
-  const handleSubmit = () => {
-    const isEmailFilled = !!loginPayload.email;
-    const isPasswordFilled = !!loginPayload.password;
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const isEmaillfilled = !!email;
+    const isPaswordFilled = !!password;
 
-    if (isEmailFilled && isPasswordFilled) {
-      handleLogin(loginPayload);
+    if (isEmaillfilled && isPaswordFilled) {
+      handleLogin({ email: email, password: password });
     }
   };
 
@@ -42,7 +48,7 @@ export const SignIn: React.FC = () => {
         <p className="text-sm text-gray-600 mb-6 text-center">
           Enter your credentials to access your account
         </p>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="email" className="block text-sm font-medium mb-1">
               Email
@@ -51,13 +57,7 @@ export const SignIn: React.FC = () => {
               type="email"
               id="email"
               placeholder="john@example.com"
-              value={loginPayload.email}
-        onChange={(e) => {
-          setLoginPayload({
-            email: e.target.value,
-            password: loginPayload.password,
-          });
-        }}
+              onChange={handleEmail}
               required/>
             
           </div>
@@ -68,19 +68,12 @@ export const SignIn: React.FC = () => {
             <Input
               type="password"
               id="password"
-              value={loginPayload.password}
-        onChange={(e) => {
-          setLoginPayload({
-            email: loginPayload.email,
-            password: e.target.value,
-          });
-        }}
+              onChange={handlePassword}
                required
             />
           </div>
           
           <Button
-            onClick={handleSubmit}
             className={cn(buttonVariants({ variant: "link", size: "lg" }), " w-full bg-blue-600 text-white ")}>
             Log In
            </Button>
