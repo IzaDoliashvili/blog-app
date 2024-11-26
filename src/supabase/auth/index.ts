@@ -1,8 +1,7 @@
 import { supabase } from "@/supabase";
 
-export const register = ({
-  email,
-  password,
+export const register = (p0: string, p1: { required: string; minLength: { value: number; message: string; }; maxLength: { value: number; message: string; }; }, {
+  email, password,
 }: {
   email: string;
   password: string;
