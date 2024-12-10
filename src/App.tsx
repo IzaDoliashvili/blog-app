@@ -14,6 +14,7 @@ import { useSetAtom } from "jotai";
 
 import { userAtom } from './store/auth';
 import ProfileView from './pages/account/profile';
+import { BlogsPage } from './pages/blogs';
 
 const queryClient = new QueryClient();
 
@@ -53,6 +54,8 @@ export const App: React.FC = () => {
         </AuthGuard>} />
         <Route path="/author/:authorName" element={<AuthorPage />} />
         <Route path="/profile" element={<ProfileView />} />
+        <Route path="/blogs" element={<BlogsPage />} />
+        
         </Route>
         
       </Routes>

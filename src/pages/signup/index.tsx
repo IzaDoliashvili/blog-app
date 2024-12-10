@@ -8,6 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
+
 export const SignUp: React.FC = () => {
 
   const { t } = useTranslation(); 
@@ -27,7 +28,7 @@ export const SignUp: React.FC = () => {
   const { mutate: handleRegister } = useMutation({
     mutationKey: ["register"],
     mutationFn: async (data: { email: string; password: string }) => {
-      return register(data.email, data.password);
+      return register(data.email,data.password);
     },
     onSuccess: () => alert("Registration successful! Check your email to confirm."),
     onError: (error: any) => alert(`Registration failed: ${error.message}`),

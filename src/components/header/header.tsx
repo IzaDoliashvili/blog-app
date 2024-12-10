@@ -30,7 +30,7 @@ export const Header: React.FC = () => {
       <div className="text-xl font-bold ">BitBlogs</div>
       <nav className="space-x-4 ">
         <Link to="/home" className="hover:text-gray-400">{t("Home")}</Link>
-        <Link to="/write" className="hover:text-gray-400">{t("Write")}</Link>
+        <Link to="/blogs" className="hover:text-gray-400">{t("Blogs")}</Link>
         <Link to="/about" className="hover:text-gray-400">{t("About")}</Link>
       </nav>
       <div className="flex w-1/4 items-center justify-end text-blue-400">

@@ -1,14 +1,25 @@
 import { supabase } from "@/supabase";
 
-export const register = (p0: string, p1: { required: string; minLength: { value: number; message: string; }; maxLength: { value: number; message: string; }; }, {
-  email, password,
+// const { error } = await supabase.auth.signUp({
+//   email: "example@example.com",
+//   password: "strongpassword123",
+// });
+
+// if (error) {
+//   console.error("Error:", error.message);
+// }
+
+
+export const register = ({
+  email,
+  password,
 }: {
   email: string;
   password: string;
 }) => {
   return supabase.auth.signUp({ email, password });
-  
 };
+
 export const login = async ({
   email,
   password,
