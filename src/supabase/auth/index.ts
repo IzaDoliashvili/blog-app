@@ -10,14 +10,21 @@ import { supabase } from "@/supabase";
 // }
 
 
-export const register = ({
+export const register = async ({
   email,
   password,
 }: {
   email: string;
   password: string;
 }) => {
-  return supabase.auth.signUp({ email, password });
+  const { data, error } = await supabase.auth.signUp({ email, password });
+
+  if (error) {
+    console.error("Error during registration:", error.message);
+    throw error; 
+  }
+
+  return data;
 };
 
 export const login = async ({

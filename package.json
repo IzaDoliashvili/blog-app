@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "prepare": "husky",
-    "supabase": "supabase gen types --lang=typescript --project-id=neqzfzfynbjicvoamfir > src/supabase/supabase.types.ts"
+    "supabase": "supabase gen types --lang=typescript --project-id=yzhmfhlfahlwbjvpjwsw > src/supabase/supabase.types.ts"
   },
   "dependencies": {
     "@dicebear/collection": "^9.2.2",

@@ -25,13 +25,19 @@ export const SignUp: React.FC = () => {
       confirmPassword: "",
     },
   });
+  
   const { mutate: handleRegister } = useMutation({
     mutationKey: ["register"],
     mutationFn: async (data: { email: string; password: string }) => {
-      return register(data.email,data.password);
+      return register(data); // Register function interacts with Supabase
     },
-    onSuccess: () => alert("Registration successful! Check your email to confirm."),
-    onError: (error: any) => alert(`Registration failed: ${error.message}`),
+    onSuccess: () => {
+      alert("Registration successful! Check your email to confirm.");
+    },
+    onError: (error: any) => {
+      console.error("Registration failed:", error.message); // Log detailed error
+      alert(`Registration failed: ${error.message}`);
+    },
   });
   
 

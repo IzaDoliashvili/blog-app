@@ -18,7 +18,7 @@ export type Database = {
           image_url: string | null
           title_en: string | null
           title_ka: string | null
-          user_id: string | null
+          user_id: number | null
         }
         Insert: {
           created_at?: string
@@ -28,7 +28,7 @@ export type Database = {
           image_url?: string | null
           title_en?: string | null
           title_ka?: string | null
-          user_id?: string | null
+          user_id?: number | null
         }
         Update: {
           created_at?: string
@@ -38,7 +38,7 @@ export type Database = {
           image_url?: string | null
           title_en?: string | null
           title_ka?: string | null
-          user_id?: string | null
+          user_id?: number | null
         }
         Relationships: [
           {
@@ -52,36 +52,27 @@ export type Database = {
       }
       profiles: {
         Row: {
-          address_en: string | null
-          address_ka: string | null
           avatar_url: string | null
+          created_at: string
           full_name_en: string | null
           full_name_ka: string | null
-          id: string
-          phone_number: string | null
-          updated_at: string | null
+          id: number
           username: string | null
         }
         Insert: {
-          address_en?: string | null
-          address_ka?: string | null
           avatar_url?: string | null
+          created_at?: string
           full_name_en?: string | null
           full_name_ka?: string | null
-          id: string
-          phone_number?: string | null
-          updated_at?: string | null
+          id?: number
           username?: string | null
         }
         Update: {
-          address_en?: string | null
-          address_ka?: string | null
           avatar_url?: string | null
+          created_at?: string
           full_name_en?: string | null
           full_name_ka?: string | null
-          id?: string
-          phone_number?: string | null
-          updated_at?: string | null
+          id?: number
           username?: string | null
         }
         Relationships: []

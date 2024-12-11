@@ -8,11 +8,14 @@ import underscore from "underscore";
 
 type SingleBlog = {
   created_at: string;
-  description: string | null;
+  description_en: string | null;
   id: number;
   image_url: string | null;
-  title: string | null;
+  title_en: string | null;
   user_id: string | null;
+  title_ka: string;
+  description_ka: string;
+  image_file: null | File;
 };
 
 type BlogsFilterFormValues = {
@@ -22,7 +25,6 @@ type BlogsFilterFormValues = {
 
 const BlogList = () => {
   const [blogs, setBlogs] = useState<SingleBlog[]>([]);
-
   const [searchParams] = useSearchParams();
   const parsedQueryParams = qs.parse(searchParams.toString());
 
@@ -38,13 +40,17 @@ const BlogList = () => {
     supabase
       .from("blogs")
       .select("*")
-      .ilike("title", `%${searchText ?? ""}%`)
+      .ilike("title_en", `%${searchText ?? ""}%`)
       .throwOnError()
       .then((res) => {
         const blogsList = res.data as unknown as SingleBlog[];
-        setBlogs(blogsList);
+        setBlogs(blogsList); console.log(blogsList);
+
       });
+      
   }, []);
+
+  
 
   const watchedSearchText = watch("searchText");
 
@@ -53,7 +59,7 @@ const BlogList = () => {
       supabase
         .from("blogs")
         .select("*")
-        .ilike("title", `${watchedSearchText}%`)
+        .ilike("title_en", `${watchedSearchText}%`)
         .throwOnError()
         .then((res) => {
           const blogsList = res.data as unknown as SingleBlog[];
@@ -64,7 +70,7 @@ const BlogList = () => {
   );
 
   useEffect(() => {
-    if (watchedSearchText?.length > 2) {
+    if (watchedSearchText?.length > 3) {
       fetchBlogs(watchedSearchText);
     }
   }, [watchedSearchText, fetchBlogs]);
@@ -86,15 +92,6 @@ const BlogList = () => {
             );
           }}
         />
-        {/* <Button
-          onClick={handleSubmit(onsubmit)}
-          className={cn(
-            buttonVariants({ variant: "link", size: "lg" }),
-            "w-full bg-blue-500 text-white"
-          )}
-        >
-          {t("Search")}
-        </Button> */}
       </div>
       <div className="flex flex-col gap-y-10 px-32">
         {blogs.map((blog) => {
@@ -110,8 +107,8 @@ const BlogList = () => {
               <div>
                 <img className="border border-black" src={blogImageUrl} />
               </div>
-              <div>{blog?.title}</div>
-              <div>{blog?.description}</div>
+              <div>{blog.title_en}</div>
+              <div>{blog.description_en}</div>
             </div>
           );
         })}

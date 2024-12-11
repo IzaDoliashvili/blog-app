@@ -31,11 +31,12 @@ const CreateBlogForm = () => {
   const { control, handleSubmit } = useForm<BlogsListCreateValues>({
     defaultValues: BlogsListFilterFormDefaultValues,
   });
+  
 
   const onSubmit = (formValues: BlogsListCreateValues) => {
     if (formValues?.image_file) {
       supabase.storage
-        .from("blog_images")
+        .from("blogs_image")
         .upload(formValues?.image_file?.name, formValues?.image_file)
         .then((res) => {
           const translatedTitle =
@@ -49,15 +50,19 @@ const CreateBlogForm = () => {
             [`title_${currentLang}`]: translatedTitle,
             [`description_${currentLang}`]: translatedDescription,
             image_url: res.data?.fullPath,
-            user_id: user?.user?.id,
+            user_id:parseInt(user?.user?.id, 10)
+            //  user?.user?.id,
           });
         })
         .then((res) => {
-          console.log("Successfully Created Blog: ", res);
+          console.log("Successfully Created Blog: ", res, "single blog:", formValues);
+          
+          
         });
+        
     }
   };
-
+  
   return (
     <div className="flex flex-col items-center justify-center gap-y-4 h-max my-12">
       <div className="flex w-96 flex-col items-center justify-center gap-y-4">
@@ -118,107 +123,3 @@ const CreateBlogForm = () => {
 };
 
 export default CreateBlogForm;
-
-// import { Button, buttonVariants } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
-// import { cn } from "@/lib/utils";
-// import { userAtom } from "@/store/auth";
-// import { supabase } from "@/supabase";
-// import { useAtom } from "jotai";
-// import { Controller, useForm } from "react-hook-form";
-// import { useTranslation } from "react-i18next";
-
-// type BlogsListCreateValues = {
-//   title_ka: string;
-//   title_ka: string;
-//   description_ka: string;
-//   description_en: string;
-//   image_file: null | File;
-// };
-
-// const BlogsListFilterFormDefaultValues = {
-//   title: "",
-//   description: "",
-//   image_file: null,
-// };
-
-// const CreateBlogForm = () => {
-//   const { t } = useTranslation(); 
-//   const [user] = useAtom(userAtom);
-
-//   const { control, handleSubmit } = useForm<BlogsListCreateValues>({
-//     defaultValues: BlogsListFilterFormDefaultValues,
-//   });
-
-//   const onSubmit = (formValues: BlogsListCreateValues) => {
-//     if (formValues?.image_file) {
-//       supabase.storage
-//         .from("blog_images")
-//         .upload(formValues?.image_file?.name, formValues?.image_file)
-//         .then((res) => {
-//           return supabase.from("blogs").insert({
-//             title: formValues.title,
-//             description: formValues.description,
-//             image_url: res.data?.fullPath,
-//             user_id: user?.user?.id,
-//           });
-//         })
-//         .then((res) => {
-//           console.log("Successfully Created Blog: ", res);
-//         });
-//     }
-//   };
-
-//   return (
-//     <div className="flex flex-col items-center justify-center gap-y-4 h-max my-12">
-//       <div className="flex w-96 flex-col items-center justify-center gap-y-4">
-//         <Controller
-//           control={control}
-//           name="title"
-//           render={({ field: { onChange, value } }) => {
-//             return (
-//               <Input onChange={onChange} value={value} placeholder="Title" />
-//             );
-//           }}
-//         />
-//         <Controller
-//           control={control}
-//           name="description"
-//           render={({ field: { onChange, value } }) => {
-//             return (
-//               <Input
-//                 onChange={onChange}
-//                 value={value}
-//                 placeholder="Description"
-//               />
-//             );
-//           }}
-//         />
-//         <Controller
-//           control={control}
-//           name="image_file"
-//           render={({ field: { onChange } }) => {
-//             return (
-//               <Input
-//                 type="file"
-//                 onChange={(e) => {
-//                   const file = e.target.files?.[0];
-//                   onChange(file);
-//                 }}
-//                 placeholder="File"
-//               />
-//             );
-//           }}
-//         />
-//         <Button
-//             onClick={handleSubmit(onSubmit)}
-//             className={cn(buttonVariants({ variant: "link", size: "lg" }), "w-full bg-blue-500 text-white")}
-//           >
-//             {t("Create Blog")}
-//         </Button>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default CreateBlogForm;
