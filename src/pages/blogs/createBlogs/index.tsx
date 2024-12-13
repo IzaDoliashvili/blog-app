@@ -7,6 +7,7 @@ import { useAtom } from "jotai";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
+
 type BlogsListCreateValues = {
   title_ka: string;
   title_en: string;
@@ -50,7 +51,8 @@ const CreateBlogForm = () => {
             [`title_${currentLang}`]: translatedTitle,
             [`description_${currentLang}`]: translatedDescription,
             image_url: res.data?.fullPath,
-            user_id:parseInt(user?.user?.id, 10)
+            user_id:parseInt(user?.user?.id, 10),
+            created_at: new Date().toISOString(),
             //  user?.user?.id,
           });
         })

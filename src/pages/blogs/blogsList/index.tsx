@@ -1,10 +1,14 @@
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/supabase";
 import qs from "qs";
-import { useCallback, useEffect, useState } from "react";
+import {useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
-import underscore from "underscore";
+import { useDebounce } from "@uidotdev/usehooks";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+dayjs.extend(relativeTime);
 
 type SingleBlog = {
   created_at: string;
@@ -31,6 +35,8 @@ const BlogList = () => {
   const { control, watch } = useForm<BlogsFilterFormValues>({
     defaultValues: parsedQueryParams,
   });
+  const watchedSearchText = watch("searchText");
+  const debounsedSearchText = useDebounce(watchedSearchText,500)
 
   useEffect(() => {
     const parsedSearchParams = qs.parse(searchParams.toString());
@@ -50,12 +56,9 @@ const BlogList = () => {
       
   }, []);
 
-  
 
-  const watchedSearchText = watch("searchText");
-
-  const fetchBlogs = useCallback(
-    underscore.debounce((watchedSearchText: string) => {
+  useEffect(() => {
+    if (debounsedSearchText?.length > 3) {
       supabase
         .from("blogs")
         .select("*")
@@ -65,15 +68,8 @@ const BlogList = () => {
           const blogsList = res.data as unknown as SingleBlog[];
           setBlogs(blogsList);
         });
-    }, 500),
-    [],
-  );
-
-  useEffect(() => {
-    if (watchedSearchText?.length > 3) {
-      fetchBlogs(watchedSearchText);
     }
-  }, [watchedSearchText, fetchBlogs]);
+  }, [debounsedSearchText]);
 
 
   return (
@@ -94,25 +90,36 @@ const BlogList = () => {
         />
       </div>
       <div className="flex flex-col gap-y-10 px-32">
+
         {blogs.map((blog) => {
           const blogImageUrl = blog?.image_url
             ? `${import.meta.env.VITE_SUPABASE_BLOG_IMAGES_STORAGE_URL}/${blog?.image_url}`
             : "";
+          const creationTime = dayjs(blog.created_at);
+          const isRecent = dayjs().diff(creationTime, "day") < 1;
+          const formattedCreationTime = isRecent
+            ? creationTime.fromNow()
+            : creationTime.format("HH:mm - DD/MM/YYYY");
 
           return (
-            <div
-              key={blog.id}
-              className="flex flex-col gap-y-4 border border-gray-400 p-6"
-            >
-              <div>
-                <img className="border border-black" src={blogImageUrl} />
-              </div>
-              <div>{blog.title_en}</div>
-              <div>{blog.description_en}</div>
-            </div>
-          );
-        })}
-      </div>
+            <Card key={blog.id}>
+              <CardHeader>
+                <CardTitle>{blog.title_en}</CardTitle>
+                <CardDescription>{blog.description_en}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                 <img  src={blogImageUrl} />
+              </CardContent>
+              <CardFooter>
+                  {isRecent
+                  ? `Created ${formattedCreationTime}`
+                  : `Creation time: ${formattedCreationTime}`}
+              </CardFooter>
+            </Card>
+  
+          )}
+        )}
+    </div>
     </div>
   );
 };
